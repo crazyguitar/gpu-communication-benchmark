@@ -14,3 +14,8 @@ link_directories(
 )
 
 add_subdirectory(third_party/multi-gpu-programming-models/single_gpu)
+add_subdirectory(third_party/multi-gpu-programming-models/single_threaded_copy)
+add_subdirectory(third_party/multi-gpu-programming-models/nccl)
+add_subdirectory(third_party/multi-gpu-programming-models/nccl_graphs)
+add_subdirectory(third_party/multi-gpu-programming-models/nccl_overlap)
+add_subdirectory(third_party/multi-gpu-programming-models/nvshmem)

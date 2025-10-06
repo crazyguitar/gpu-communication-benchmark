@@ -1,6 +1,6 @@
 .PHONY: all clean build
 
-all:
+all: build
 
 build:
 	./build.sh
