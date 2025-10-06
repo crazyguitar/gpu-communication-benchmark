@@ -8,6 +8,7 @@ ARG GDRCOPY_VERSION=v2.5.1
 ARG EFA_INSTALLER_VERSION=1.43.2
 ARG AWS_OFI_NCCL_VERSION=v1.16.3
 ARG NCCL_VERSION=v2.27.7-1
+ARG NCCL_TESTS_VERSION=v2.16.9
 
 RUN apt-get update -y && apt-get upgrade -y
 RUN apt-get remove -y --allow-change-held-packages \
