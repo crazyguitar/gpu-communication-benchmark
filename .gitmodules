@@ -1,6 +1,6 @@
 [submodule "third_party/multi-gpu-programming-models"]
 	path = third_party/multi-gpu-programming-models
-	url = https://github.com/NVIDIA/multi-gpu-programming-models
+	url = git@github.com:crazyguitar/multi-gpu-programming-models.git
 [submodule "third_party/nvshmem"]
 	path = third_party/nvshmem
 	url = https://github.com/NVIDIA/nvshmem.git
