@@ -14,14 +14,12 @@ spec:
          spec:
           restartPolicy: OnFailure
           containers:
-          - image: 855988369404.dkr.ecr.us-west-2.amazonaws.com/changnit-test:gpucomm-v1
+          - image: 855988369404.dkr.ecr.us-west-2.amazonaws.com/changnit-test:gpucomm-v3
             imagePullPolicy: IfNotPresent
             name: nccl-test-launcher
             env:
              - name: PATH
                value: $PATH:/opt/amazon/efa/bin:/usr/bin
-             - name: LD_LIBRARY_PATH
-               value: /opt/amazon/openmpi/lib:/opt/nccl/build/lib:/opt/amazon/efa/lib:/opt/aws-ofi-nccl/install/lib:/usr/local/nvidia/lib:$LD_LIBRARY_PATH
             command:
             - /opt/amazon/openmpi/bin/mpirun
             - --allow-run-as-root
@@ -77,7 +75,7 @@ spec:
           nodeSelector:
             node.kubernetes.io/instance-type: "ml.p5.48xlarge" # hyperpod instance type
           containers:
-          - image: 855988369404.dkr.ecr.us-west-2.amazonaws.com/changnit-test:gpucomm-v1
+          - image: 855988369404.dkr.ecr.us-west-2.amazonaws.com/changnit-test:gpucomm-v3
             imagePullPolicy: IfNotPresent
             name: nccl-tests-worker
             volumeMounts:

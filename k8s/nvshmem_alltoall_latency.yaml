@@ -1,7 +1,7 @@
 apiVersion: kubeflow.org/v2beta1
 kind: MPIJob
 metadata:
-  name: nccl-test-all-gather
+  name: nvshmem-alltoall-latency
 spec:
   runPolicy:
     cleanPodPolicy: Running
@@ -14,9 +14,9 @@ spec:
          spec:
           restartPolicy: OnFailure
           containers:
-          - image: 855988369404.dkr.ecr.us-west-2.amazonaws.com/changnit-test:gpucomm-v2
+          - image: 855988369404.dkr.ecr.us-west-2.amazonaws.com/changnit-test:gpucomm-v3
             imagePullPolicy: IfNotPresent
-            name: nccl-test-launcher
+            name: nvshmem-alltoall-launcher
             env:
              - name: PATH
                value: $PATH:/opt/amazon/efa/bin:/usr/bin
@@ -25,7 +25,7 @@ spec:
             - --allow-run-as-root
             - --tag-output
             - -np
-            - "16"
+            - "8"
             - -N
             - "8"
             - --bind-to
@@ -55,29 +55,17 @@ spec:
             - --mca
             - btl_tcp_if_exclude
             - lo,docker0,veth_def_agent
-            - /opt/nccl-tests/build/all_gather_perf
-            - -b
-            - "32M"
-            - -e
-            - "1024M"
-            - -f
-            - "2"
-            - -n
-            - "100"
-            - -w
-            - "10"
-            - --blocking
-            - "0"
+            - /opt/nvshmem/bin/perftest/device/coll/alltoall_latency
     Worker:
-      replicas: 2
+      replicas: 1
       template:
         spec:
           nodeSelector:
             node.kubernetes.io/instance-type: "ml.p5.48xlarge" # hyperpod instance type
           containers:
-          - image: 855988369404.dkr.ecr.us-west-2.amazonaws.com/changnit-test:gpucomm-v2
+          - image: 855988369404.dkr.ecr.us-west-2.amazonaws.com/changnit-test:gpucomm-v3
             imagePullPolicy: IfNotPresent
-            name: nccl-tests-worker
+            name: nvshmem-alltoall-worker
             volumeMounts:
             - name: shmem
               mountPath: /dev/shm
