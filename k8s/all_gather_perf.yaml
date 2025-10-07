@@ -14,7 +14,7 @@ spec:
          spec:
           restartPolicy: OnFailure
           containers:
-          - image: 855988369404.dkr.ecr.us-west-2.amazonaws.com/changnit-test:gpucomm-v2
+          - image: 855988369404.dkr.ecr.us-west-2.amazonaws.com/changnit-test:gpucomm-v4
             imagePullPolicy: IfNotPresent
             name: nccl-test-launcher
             env:
@@ -75,7 +75,7 @@ spec:
           nodeSelector:
             node.kubernetes.io/instance-type: "ml.p5.48xlarge" # hyperpod instance type
           containers:
-          - image: 855988369404.dkr.ecr.us-west-2.amazonaws.com/changnit-test:gpucomm-v2
+          - image: 855988369404.dkr.ecr.us-west-2.amazonaws.com/changnit-test:gpucomm-v4
             imagePullPolicy: IfNotPresent
             name: nccl-tests-worker
             volumeMounts:

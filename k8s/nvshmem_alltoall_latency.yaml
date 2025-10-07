@@ -14,7 +14,7 @@ spec:
          spec:
           restartPolicy: OnFailure
           containers:
-          - image: 855988369404.dkr.ecr.us-west-2.amazonaws.com/changnit-test:gpucomm-v3
+          - image: 855988369404.dkr.ecr.us-west-2.amazonaws.com/changnit-test:gpucomm-v4
             imagePullPolicy: IfNotPresent
             name: nvshmem-alltoall-launcher
             env:
@@ -25,7 +25,7 @@ spec:
             - --allow-run-as-root
             - --tag-output
             - -np
-            - "8"
+            - "16"
             - -N
             - "8"
             - --bind-to
@@ -57,13 +57,13 @@ spec:
             - lo,docker0,veth_def_agent
             - /opt/nvshmem/bin/perftest/device/coll/alltoall_latency
     Worker:
-      replicas: 1
+      replicas: 2
       template:
         spec:
           nodeSelector:
             node.kubernetes.io/instance-type: "ml.p5.48xlarge" # hyperpod instance type
           containers:
-          - image: 855988369404.dkr.ecr.us-west-2.amazonaws.com/changnit-test:gpucomm-v3
+          - image: 855988369404.dkr.ecr.us-west-2.amazonaws.com/changnit-test:gpucomm-v4
             imagePullPolicy: IfNotPresent
             name: nvshmem-alltoall-worker
             volumeMounts:
