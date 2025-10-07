@@ -120,31 +120,24 @@ RUN git clone https://github.com/NVIDIA/nvshmem.git /nvshmem \
   && mkdir -p build \
   && cd build \
   && cmake -DNVSHMEM_PREFIX=/opt/nvshmem \
-    -DCMAKE_CUDA_ARCHITECTURES="90a;100" \
-    -DCUDA_HOME=/usr/local/cuda \
-    -DNVSHMEM_USE_GDRCOPY=1 \
-    -DGDRCOPY_HOME=/opt/gdrcopy \
-    -DNVSHMEM_USE_NCCL=1 \
-    -DNCCL_HOME=/opt/nccl/build \
-    -DNCCL_INCLUDE=/opt/nccl/build/include \
-    -DNVSHMEM_LIBFABRIC_SUPPORT=1 \
-    -DLIBFABRIC_HOME=/opt/amazon/efa \
+    -DCMAKE_CUDA_ARCHITECTURES="80;90" \
     -DNVSHMEM_MPI_SUPPORT=1 \
-    -DMPI_HOME=/opt/amazon/openmpi \
     -DNVSHMEM_PMIX_SUPPORT=1 \
-    -DPMIX_HOME=/opt/amazon/pmix \
-    -DNVSHMEM_DEFAULT_PMIX=1 \
+    -DNVSHMEM_LIBFABRIC_SUPPORT=1 \
+    -DNVSHMEM_IBRC_SUPPORT=1 \
+    -DNVSHMEM_IBGDA_SUPPORT=1 \
     -DNVSHMEM_BUILD_TESTS=1 \
     -DNVSHMEM_BUILD_EXAMPLES=1 \
     -DNVSHMEM_BUILD_HYDRA_LAUNCHER=1 \
     -DNVSHMEM_BUILD_TXZ_PACKAGE=0 \
-    -DNVSHMEM_IBRC_SUPPORT=1 \
-    -DNVSHMEM_IBGDA_SUPPORT=1 \
-    -DNVSHMEM_TIMEOUT_DEVICE_POLLING=0 \
+    -DNVSHMEM_BUILD_PYTHON_LIB=0 \
+    -DMPI_HOME=/opt/amazon/openmpi \
+    -DPMIX_HOME=/opt/amazon/pmix \
+    -DGDRCOPY_HOME=/opt/gdrcopy \
+    -DLIBFABRIC_HOME=/opt/amazon/efa \
     -G Ninja .. \
   && ninja -j $(nproc) \
-  && ninja install \
-  && rm -rf /tmp/nvshmem
+  && ninja install
 
 RUN pip3 install nvshmem4py-cu12
 
@@ -167,3 +160,6 @@ ENV PMIX_MCA_gds=hash
 
 ## Set LD_PRELOAD for NCCL library
 ENV LD_PRELOAD=/opt/nccl/build/lib/libnccl.so
+
+ADD . /gpu-communication-benchmark
+RUN cd /gpu-communication-benchmark && make

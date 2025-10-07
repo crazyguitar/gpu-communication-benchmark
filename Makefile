@@ -5,7 +5,7 @@ all: build
 build:
 	./build.sh
 
-sqush:
+sqush: clean
 	./enroot.sh -n gpucomm -f ${PWD}/Dockerfile
 
 clean:
