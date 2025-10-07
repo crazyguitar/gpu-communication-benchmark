@@ -1,7 +1,7 @@
 apiVersion: kubeflow.org/v2beta1
 kind: MPIJob
 metadata:
-  name: single-gpu
+  name: jacobi-single-gpu
 spec:
   runPolicy:
     cleanPodPolicy: Running
@@ -16,7 +16,7 @@ spec:
           containers:
           - image: 855988369404.dkr.ecr.us-west-2.amazonaws.com/changnit-test:gpucomm-v4
             imagePullPolicy: IfNotPresent
-            name: single-gpu
+            name: jacobi-single-gpu
             env:
              - name: PATH
                value: $PATH:/opt/amazon/efa/bin:/usr/bin
@@ -53,7 +53,7 @@ spec:
           containers:
           - image: 855988369404.dkr.ecr.us-west-2.amazonaws.com/changnit-test:gpucomm-v4
             imagePullPolicy: IfNotPresent
-            name: single-gpu
+            name: jacobi-single-gpu
             volumeMounts:
             - name: shmem
               mountPath: /dev/shm
