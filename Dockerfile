@@ -50,6 +50,8 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y --allow-unauthenticated \
     vim \
     hwloc \
     libhwloc-dev \
+    python3.10-dev \
+    python3.10-venv \
     libomp-dev
 
 RUN apt-get purge -y cuda-compat-*
@@ -110,27 +112,35 @@ RUN git clone -b ${NCCL_TESTS_VERSION} https://github.com/NVIDIA/nccl-tests.git 
 
 ###################################################
 ## Install NVSHMEM
-RUN git clone https://github.com/NVIDIA/nvshmem.git /tmp/nvshmem \
-  && cd /tmp/nvshmem \
+ENV NVSHMEM_DIR=/opt/nvshmem
+ENV NVSHMEM_HOME=/opt/nvshmem
+RUN git clone https://github.com/NVIDIA/nvshmem.git /nvshmem \
+  && cd /nvshmem \
   && git checkout 131da55f643ac87c810ba0bc51d359258bf433a1 \
   && mkdir -p build \
   && cd build \
   && cmake -DNVSHMEM_PREFIX=/opt/nvshmem \
-    -DCMAKE_CUDA_ARCHITECTURES="80;90" \
-    -DNVSHMEM_MPI_SUPPORT=1 \
-    -DNVSHMEM_PMIX_SUPPORT=1 \
+    -DCMAKE_CUDA_ARCHITECTURES="90a;100" \
+    -DCUDA_HOME=/usr/local/cuda \
+    -DNVSHMEM_USE_GDRCOPY=1 \
+    -DGDRCOPY_HOME=/opt/gdrcopy \
+    -DNVSHMEM_USE_NCCL=1 \
+    -DNCCL_HOME=/opt/nccl/build \
+    -DNCCL_INCLUDE=/opt/nccl/build/include \
     -DNVSHMEM_LIBFABRIC_SUPPORT=1 \
+    -DLIBFABRIC_HOME=/opt/amazon/efa \
+    -DNVSHMEM_MPI_SUPPORT=1 \
+    -DMPI_HOME=/opt/amazon/openmpi \
+    -DNVSHMEM_PMIX_SUPPORT=1 \
+    -DPMIX_HOME=/opt/amazon/pmix \
+    -DNVSHMEM_DEFAULT_PMIX=1 \
+    -DNVSHMEM_BUILD_TESTS=1 \
+    -DNVSHMEM_BUILD_EXAMPLES=1 \
+    -DNVSHMEM_BUILD_HYDRA_LAUNCHER=1 \
+    -DNVSHMEM_BUILD_TXZ_PACKAGE=0 \
     -DNVSHMEM_IBRC_SUPPORT=1 \
     -DNVSHMEM_IBGDA_SUPPORT=1 \
-    -DNVSHMEM_BUILD_TESTS=0 \
-    -DNVSHMEM_BUILD_EXAMPLES=0 \
-    -DNVSHMEM_BUILD_HYDRA_LAUNCHER=0 \
-    -DNVSHMEM_BUILD_TXZ_PACKAGE=0 \
-    -DNVSHMEM_BUILD_PYTHON_LIB=0 \
-    -DMPI_HOME=/opt/amazon/openmpi \
-    -DPMIX_HOME=/opt/amazon/pmix \
-    -DGDRCOPY_HOME=/opt/gdrcopy \
-    -DLIBFABRIC_HOME=/opt/amazon/efa \
+    -DNVSHMEM_TIMEOUT_DEVICE_POLLING=0 \
     -G Ninja .. \
   && ninja -j $(nproc) \
   && ninja install \
@@ -138,7 +148,10 @@ RUN git clone https://github.com/NVIDIA/nvshmem.git /tmp/nvshmem \
 
 RUN pip3 install nvshmem4py-cu12
 
-ENV LD_LIBRARY_PATH=/opt/nvshmem/lib:$LD_LIBRARY_PATH
+ENV LD_LIBRARY_PATH=/opt/amazon/pmix/lib:/opt/nvshmem/lib:$LD_LIBRARY_PATH
+ENV PATH=/opt/nvshmem/bin:$PATH
+ENV NVSHMEM_REMOTE_TRANSPORT=libfabric
+ENV NVSHMEM_LIBFABRIC_PROVIDER=efa
 
 RUN rm -rf /var/lib/apt/lists/*
 
