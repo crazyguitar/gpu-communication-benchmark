@@ -1,6 +1,6 @@
 # GPU Communication Benchmarking
 
-## Launch benchmarking jobs
+## Launch benchmarking jobs on K8S
 
 ```
 # Launch a 2 nodes all_gather nccl-test
@@ -17,6 +17,25 @@ kubectl -f k8s/jacobi_nccl.yaml
 
 # Launch a 2 nodes Jacobi /w NCCL + CUDA Graphs
 kubectl -f k8s/jacobi_nccl_graphs.yaml
+```
+
+## Launch benchmarking jobs on Slurm
+
+```
+# Login to a compute node
+srun -N 1 --pty /bin/ash
+
+# Build a enroot sqush file
+make sqush
+
+# Start an enroot environment and build binaries
+enroot create --name efa gpucomm+latest.sqsh
+enroot start --mount /fsx:/fsx gpucomm /bin/bash
+make
+
+# Launch a nvshmem benchmark on Slurm
+bash slurm/jacobi_nvshmem.sh
+
 ```
 
 ## Reference
