@@ -66,6 +66,8 @@ spec:
           - image: 855988369404.dkr.ecr.us-west-2.amazonaws.com/changnit-test:gpucomm-v4
             imagePullPolicy: IfNotPresent
             name: nvshmem-intranode-worker
+            securityContext:
+              privileged: true
             volumeMounts:
             - name: shmem
               mountPath: /dev/shm
