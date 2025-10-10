@@ -57,9 +57,9 @@ spec:
             - lo,docker0,veth_def_agent
             - /opt/nccl-tests/build/all_reduce_perf
             - -b
-            - "8"
+            - "32M"
             - -e
-            - "16G"
+            - "8192M"
             - -f
             - "2"
             - -g
@@ -67,7 +67,7 @@ spec:
             - -c
             - "1"
             - -n
-            - "100"
+            - "1000"
     Worker:
       replicas: 2
       template:
