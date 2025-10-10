@@ -1,0 +1,8 @@
+Experiment,Instance,Node,GPUs,Size,Baseline(sec),Time(sec),Speedup,Efficiency
+NCCL,p5.48xlarge,2,16,16384x16384,472.1434,31.5063,14.98,93.64
+NCCL w/ Overlap,p5.48xlarge,2,16,16384x16384,471.3865,31.4276,15.00,93.74
+NCCL w/ Overlap + CUDA Graph,p5.48xlarge,2,16,16384x16384,471.9803,31.4152,15.02,93.90
+NCCL w/ Overlap + CUDA Graph + User Buffer,p5.48xlarge,2,16,16384x16384,472.1673,31.4831,15.00,93.73
+NVSHMEM,p5.48xlarge,2,16,16384x16384,472.2941,42.4399,11.13,69.55
+NVSHMEM w/ Block Comm,p5.48xlarge,2,16,16384x16384,472.5719,29.6598,15.93,99.58
+NVSHMEM w/ Block Comm + Overlap + Neighborhood Sync,p5.48xlarge,2,16,16384x16384,472.3484,29.5221,16.00,100.00

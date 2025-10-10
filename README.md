@@ -1,4 +1,4 @@
-# GPU Communication Benchmarking
+# GPU Communication Over AWS EFA Benchmarking
 
 ## Launch benchmarking jobs on K8S
 
